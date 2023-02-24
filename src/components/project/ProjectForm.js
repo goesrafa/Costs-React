@@ -1,24 +1,45 @@
-import styles from './ProjectForm.module.css';
+import { useState , useEffect} from "react";
+import Input from "../form/Input";
+import Select from "../form/Select";
+import SubmitButton from "../form/SubmitButton";
 
-function ProjectForm() {
+import styles from "./ProjectForm.module.css";
+
+function ProjectForm({btnText}) {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() =>{
+    fetch("http://localhost:5000/categories", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      setCategories(data);
+    })
+    .catch((err) => console.log(err));
+  }, [])
+
   return (
     <form className={styles.form}>
-      <div>
-        <input type="text" placeholder="Insira o nome do projetos" />
-      </div>
-      <div>
-        <input type="number" placeholder="Orçamento total" />
-      </div>
-      <div>
-        <select name="category_id">
-          <option disabled selected>
-            Selecione a categoria
-          </option>
-        </select>
-      </div>
-      <div>
-        <input type="submit" value="Inserir o projet" />
-      </div>
+      <Input
+        type="text"
+        text="Nome do projeto"
+        name="name"
+        placeholder="Insira o nome do projeto"
+      />
+
+      <Input
+        type="number"
+        text="Orçamento do projeto R$"
+        name="budget"
+        placeholder="Insira o orçamento total"
+      />
+
+      <Select name="category_id" text="Selecione a categoria" options={categories} />
+      <SubmitButton text={btnText}/>
     </form>
   );
 }
