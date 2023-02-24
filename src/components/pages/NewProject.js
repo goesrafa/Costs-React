@@ -3,7 +3,7 @@ import React from "react";
 import ProjectForm from "../project/ProjectForm";
 import styles from "./NewProject.module.css";
 
-function NewProject() {
+function NewProject({handleSubmit, btnText, projectData}) {
   const history = useHistory();
 
   function createPost(project) {
@@ -16,7 +16,7 @@ function NewProject() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(project)
+      body: JSON.stringify(project),
     })
       .then((resp) => resp.json())
       .then((data) => {
@@ -29,7 +29,7 @@ function NewProject() {
     <div className={styles.newproject_container}>
       <h1>Novo projeto</h1>
       <p>Crie o seu projeto para posteriormente adicionar seu serviço</p>
-      <ProjectForm btnText="Criar Projeto" />
+      <ProjectForm handleSubmit={createPost} btnText="Criar Projeto" />
     </div>
   );
 }
